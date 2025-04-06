@@ -1,6 +1,7 @@
 # kz_blog
 
-This template should help get you started developing with Vue 3 in Vite.
+This is a VUE html project.
+Using **Cursor** as my AI assistance
 
 ## Recommended IDE Setup
 
