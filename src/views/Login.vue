@@ -2,6 +2,7 @@
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { userApi } from '../services/api'
+import { useUserStore } from '../store/api'
 
 const router = useRouter()
 const isLogin = ref(true)
@@ -96,7 +97,8 @@ const handleLogin = async () => {
     setLocalStorageItem('token', response)
     setLocalStorageItem('username', loginForm.username)
     setLocalStorageItem('isLoggedIn', 'true')
-    
+    const userStore = useUserStore()
+    await userStore.fetchUserInfo()
     // 登录成功，跳转到首页
     router.push('/')
   } catch (err) {

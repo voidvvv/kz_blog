@@ -3,6 +3,7 @@ import Home from '../views/Home.vue'
 import BlogDetail from '../components/BlogDetail.vue'
 import Login from '../views/Login.vue'
 import PostEditor from '../components/PostEditor.vue'
+import { useUserStore } from '../store/api'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -33,8 +34,10 @@ const router = createRouter({
 
 // 路由守卫
 router.beforeEach((to, from, next) => {
-  const isAuthenticated = localStorage.getItem('isLoggedIn') === 'true'
-  
+  const userStore = useUserStore()
+  userStore.fetchUserInfo()
+  const isAuthenticated = userStore.$state.isLoggedIn
+
   if (to.meta.requiresAuth && !isAuthenticated) {
     next('/login')
   } else {

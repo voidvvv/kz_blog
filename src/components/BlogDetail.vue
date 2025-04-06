@@ -37,6 +37,11 @@ const checkLoginStatus = () => {
   }
 }
 
+function formatTimestamp(timestamp) {
+  const date = new Date(timestamp);
+  return date.toLocaleString(); // 根据浏览器本地设置格式化
+}
+
 // 获取文章数据
 const fetchPost = async () => {
   isLoading.value = true
@@ -47,6 +52,7 @@ const fetchPost = async () => {
     // 从API获取文章
     const response = await blogApi.getPost(postId)
     post.value = response.data
+    post.value.date = formatTimestamp(post.value.createDate)
     isLoading.value = false
     
     // 获取评论

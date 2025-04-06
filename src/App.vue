@@ -1,11 +1,15 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useUserStore } from './store/api'
 
 const router = useRouter()
 const route = useRoute()
 const searchQuery = ref('')
-const isLoggedIn = ref(localStorage.getItem('isLoggedIn') === 'true')
+const userStore = useUserStore()
+
+const isLoggedIn = false
+
 
 const navigateTo = (route) => {
   router.push(route)
@@ -37,7 +41,7 @@ const navigateTo = (route) => {
           class="nav-link"
           :class="{ active: route.path === '/login' }"
         >
-          {{ isLoggedIn ? '个人中心' : '登录' }}
+          {{ userStore.$state.isLoggedIn ? '个人中心' : '登录' }}
         </router-link>
       </div>
       <div class="search-box">

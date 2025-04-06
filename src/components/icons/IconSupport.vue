@@ -5,3 +5,7 @@
     />
   </svg>
 </template>
+
+<script setup>
+  export const name111 = 'IconSupport'
+</script>

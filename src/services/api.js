@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+
 // 创建axios实例
 const api = axios.create({
   baseURL: 'http://localhost:8080/', // 替换为您的API基础URL
@@ -14,6 +15,7 @@ api.interceptors.request.use(
   config => {
     const token = localStorage.getItem('token');
     if (token) {
+
     //   config.headers['Authorization'] = `Bearer ${token}`;
         config.headers['KZ_AUTH'] = token;
     }
@@ -109,5 +111,9 @@ export const commentApi = {
     return api.delete(`/comments/${commentId}`);
   }
 };
+
+export function getUserInfo () {
+  return api.get('/user/current').data;
+}
 
 export default api; 
