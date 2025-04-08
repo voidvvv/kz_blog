@@ -4,7 +4,7 @@ import BlogDetail from '../components/BlogDetail.vue'
 import Login from '../views/Login.vue'
 import PostEditor from '../components/PostEditor.vue'
 import { useUserStore } from '../store/api'
-
+import UserDetail from '../views/UserDetail.vue'
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -28,6 +28,11 @@ const router = createRouter({
       path: '/editor',
       name: 'editor',
       component: PostEditor
+    },
+    {
+      path: '/user',
+      name: 'user',
+      component: UserDetail
     }
   ]
 })
@@ -35,7 +40,7 @@ const router = createRouter({
 // 路由守卫
 router.beforeEach((to, from, next) => {
   const userStore = useUserStore()
-  userStore.fetchUserInfo()
+  // userStore.fetchUserInfo()
   const isAuthenticated = userStore.$state.isLoggedIn
 
   if (to.meta.requiresAuth && !isAuthenticated) {

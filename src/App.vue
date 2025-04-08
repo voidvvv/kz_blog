@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useUserStore } from './store/api'
 
@@ -7,8 +7,7 @@ const router = useRouter()
 const route = useRoute()
 const searchQuery = ref('')
 const userStore = useUserStore()
-
-const isLoggedIn = false
+const isLoggedIn = computed(() => userStore.isLoggedIn)
 
 
 const navigateTo = (route) => {
@@ -37,7 +36,7 @@ const navigateTo = (route) => {
           写文章
         </router-link>
         <router-link 
-          to="/login" 
+          :to="isLoggedIn ? '/user' : '/login'" 
           class="nav-link"
           :class="{ active: route.path === '/login' }"
         >

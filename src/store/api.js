@@ -1,16 +1,20 @@
 import { defineStore } from 'pinia'
 import { getUserInfo } from '../services/api'
+import { computed } from 'vue'
 
 export const useUserStore = defineStore('user', {
     state: () => ({
       userInfo: null,
-      isLoggedIn: false,
+      isLoggedIn: computed(() => {
+        return localStorage.getItem('token') != null
+      }),
       isLoaded: false
     }),
   
     actions: {
       async fetchUserInfo() {
         try {
+
           const token = localStorage.getItem('token')
           if (!token) {
             this.isLoggedIn = false
@@ -22,14 +26,14 @@ export const useUserStore = defineStore('user', {
           }
           // 调用API获取用户信息
           const response = await getUserInfo()
+          console.log(response)
           this.userInfo = response
-          this.isLoggedIn = true
           this.isLoaded = true
           return true
         } catch (error) {
           console.error('认证检查失败:', error)
-          this.isLoggedIn = false
           this.isLoaded = false
+          this.userInfo = null
           return false
         }
       }

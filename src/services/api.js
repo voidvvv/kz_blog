@@ -39,7 +39,7 @@ api.interceptors.response.use(
       localStorage.removeItem('isLoggedIn');
       // 可以添加重定向到登录页面的逻辑
     }
-    return Promise.reject(error);
+    throw Promise.reject(error);
   }
 );
 
@@ -113,7 +113,7 @@ export const commentApi = {
 };
 
 export function getUserInfo () {
-  return api.get('/user/current').data;
+  return api.get('/user/current');
 }
 
 export default api; 
