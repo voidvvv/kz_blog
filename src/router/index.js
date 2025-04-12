@@ -42,7 +42,7 @@ router.beforeEach((to, from, next) => {
   const userStore = useUserStore()
   // userStore.fetchUserInfo()
   const isAuthenticated = userStore.$state.isLoggedIn
-
+  userStore.isLoggedIn;
   if (to.meta.requiresAuth && !isAuthenticated) {
     next('/login')
   } else {

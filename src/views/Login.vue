@@ -95,13 +95,21 @@ const handleLogin = async () => {
     // alert(response)
     // 存储用户信息到本地存储
     setLocalStorageItem('token', response)
+    // console.log('localtoken: ' + localStorage.getItem('token'))
+    // console.log('response: ' + response)
     setLocalStorageItem('username', loginForm.username)
     setLocalStorageItem('isLoggedIn', 'true')
+
     const userStore = useUserStore()
+    userStore.token = response
+    userStore.isLoggedIn = true;
     await userStore.fetchUserInfo()
     // 登录成功，跳转到首页
     router.push('/')
   } catch (err) {
+    const userStore = useUserStore()
+    
+    userStore.isLoggedIn;
     console.error('登录失败:', err)
     errorMsg.value = '用户名或密码错误，请重试'
     

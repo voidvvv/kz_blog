@@ -9,6 +9,16 @@ const searchQuery = ref('')
 const userStore = useUserStore()
 const isLoggedIn = computed(() => userStore.isLoggedIn)
 
+const userLabel = computed(() => {
+ return userStore.$state.isLoggedIn ? '个人中心' : '登录'
+})
+
+const userUrl = computed(() => {
+  return userStore.$state.isLoggedIn ? '/user' : '/login'
+})
+// function alert(isLoggedIn) {
+//   console.log(isLoggedIn)
+// }
 
 const navigateTo = (route) => {
   router.push(route)
@@ -36,13 +46,15 @@ const navigateTo = (route) => {
           写文章
         </router-link>
         <router-link 
-          :to="isLoggedIn ? '/user' : '/login'" 
+          :to="userUrl" 
           class="nav-link"
-          :class="{ active: route.path === '/login' }"
+          :class="{ active: route.path === userUrl }"
         >
-          {{ userStore.$state.isLoggedIn ? '个人中心' : '登录' }}
+          {{ userLabel }}
         </router-link>
+
       </div>
+      
       <div class="search-box">
         <input 
           type="text" 
@@ -52,11 +64,11 @@ const navigateTo = (route) => {
         >
       </div>
     </nav>
-
     <!-- 主要内容区域 -->
     <main class="main-content">
       <router-view></router-view>
     </main>
+    <!-- <button @click="alert(userStore.$state.isLoggedIn)">alert</button> -->
 
     <!-- 页脚 -->
     <footer class="footer">

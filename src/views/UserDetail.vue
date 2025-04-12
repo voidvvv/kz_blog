@@ -21,7 +21,7 @@ onMounted(async () => {
     } finally {
         loading.value = false
     }
-})
+})+
 
 function formatDate(timestamp) {
     if (!timestamp) return '未知'

@@ -1,13 +1,13 @@
 import { defineStore } from 'pinia'
 import { getUserInfo } from '../services/api'
 import { computed } from 'vue'
+import { ref } from 'vue'
 
 export const useUserStore = defineStore('user', {
     state: () => ({
       userInfo: null,
-      isLoggedIn: computed(() => {
-        return localStorage.getItem('token') != null
-      }),
+      isLoggedIn: ref(localStorage.getItem('token') != null),
+      token: ref(localStorage.getItem('token')),
       isLoaded: false
     }),
   
