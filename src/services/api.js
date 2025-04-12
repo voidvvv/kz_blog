@@ -91,6 +91,11 @@ export const userApi = {
   // 更新用户信息
   updateProfile: (userData) => {
     return api.put('/auth/profile', userData);
+  },
+
+  // 退出
+  logout: () => {
+    return api.post('/logout');
   }
 };
 

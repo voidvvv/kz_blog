@@ -53,6 +53,16 @@ export const useUserStore = defineStore('user', {
         this.userInfo = null
         return false
       }
+    },
+    logout() {
+      // 清除本地存储
+      localStorage.removeItem('token')
+      localStorage.removeItem('username')
+      // 重置状态
+      this.userInfo = null
+      this.isLoggedIn = false
+      this.token = null
+      this.isLoaded = false
     }
   }
 })

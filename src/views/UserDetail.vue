@@ -1,7 +1,10 @@
 <script setup>
 import { useUserStore } from '@/store/api'
 import { ref, computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { userApi } from '@/services/api'
 
+const router = useRouter()
 const userStore = useUserStore()
 const userInfoErr = ref(false)
 const loading = ref(true)
@@ -9,14 +12,20 @@ const loading = ref(true)
 // 使用计算属性安全地访问用户信息
 const userInfo = ref(null)
 
+// 退出登录
+const handleLogout = () => {
+
+  userApi.logout()
+  userStore.logout()
+  router.push('/')
+}
+
 onMounted(async () => {
     try {
-        
         userInfo.value = await userStore.fetchUserInfo()
         if (!userInfo.value || Object.keys(userInfo.value).length === 0) {
             userInfoErr.value = true
         }
-
     } catch (error) {
         console.error('获取用户信息失败:', error)
         userInfoErr.value = true
@@ -57,6 +66,7 @@ function formatDate(timestamp) {
                 <p><strong>用户名:</strong> {{ userInfo.username || '未设置' }}</p>
                 <p><strong>邮箱:</strong> {{ userInfo.email || '未设置' }}</p>
                 <p><strong>注册时间:</strong> {{ formatDate(userInfo.createdAt) }}</p>
+                <button @click="handleLogout" class="logout-btn">退出登录</button>
             </div>
         </div>
     </div>
@@ -105,5 +115,21 @@ function formatDate(timestamp) {
 .info-container strong {
     color: #333;
     margin-right: 10px;
+}
+
+.logout-btn {
+    margin-top: 20px;
+    padding: 8px 16px;
+    background-color: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.logout-btn:hover {
+    background-color: #cc0000;
 }
 </style>

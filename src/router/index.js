@@ -29,12 +29,18 @@ const router = createRouter({
       path: '/editor/:id?',
       name: 'editor',
       component: PostEditor,
-      props: true
+      props: true,
+      meta: {
+        requiresAuth: true
+      }
     },
     {
       path: '/user',
       name: 'user',
-      component: UserDetail
+      component: UserDetail,
+      meta: {
+        requiresAuth: true
+      }
     }
   ]
 })
