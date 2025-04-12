@@ -42,7 +42,6 @@ const fetchPosts = async () => {
   try {
     // 从API获取文章
     const response = await blogApi.getPosts({page:1,pageSize:10})
-    
     // 确保posts.value始终为数组
     if (Array.isArray(response)) {
       posts.value = response

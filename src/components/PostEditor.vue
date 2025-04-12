@@ -21,7 +21,7 @@ const getLocalStorageItem = (key, defaultValue = '') => {
   }
 }
 
-const post = reactive({
+const post = ref({
   id: null,
   title: '',
   content: '',
@@ -37,20 +37,20 @@ const isEditMode = ref(false)
 // 添加标签
 const addTag = () => {
   const tag = newTag.value.trim()
-  if (tag && !post.tags.includes(tag)) {
-    post.tags.push(tag)
+  if (tag && !post.value.tags.includes(tag)) {
+    post.value.tags.push(tag)
     newTag.value = ''
   }
 }
 
 // 移除标签
 const removeTag = (index) => {
-  post.tags.splice(index, 1)
+  post.value.tags.splice(index, 1)
 }
 
 // 保存草稿
 const saveDraft = async () => {
-  if (!post.title || !post.content) {
+  if (!post.value.title || !post.value.content) {
     error.value = '标题和内容不能为空'
     return
   }
@@ -60,17 +60,17 @@ const saveDraft = async () => {
 
   try {
     // 如果摘要为空，自动生成摘要
-    if (!post.excerpt) {
-      post.excerpt = post.content
+    if (!post.value.excerpt) {
+      post.value.excerpt = post.value.content
         .replace(/#|`|_|\*|\[|\]/g, '')
         .substring(0, 150) + '...'
     }
 
     if (isEditMode.value) {
-      await blogApi.updatePost(post.id, post)
+      await blogApi.updatePost(post.value.id, post.value)
     } else {
-      const response = await blogApi.createPost(post)
-      post.id = response.data.id
+      const response = await blogApi.createPost(post.value)
+      post.value.id = response.data.id
       isEditMode.value = true
     }
 
@@ -83,7 +83,7 @@ const saveDraft = async () => {
     
     // 模拟成功状态
     if (!isEditMode.value) {
-      post.id = Date.now()
+      post.value.id = Date.now()
       isEditMode.value = true
     }
     
@@ -93,33 +93,33 @@ const saveDraft = async () => {
 
 // 发布文章
 const publishPost = async () => {
-  if (!post.title || !post.content) {
+  if (!post.value.title || !post.value.content) {
     error.value = '标题和内容不能为空'
     return
   }
   
-  if (!post.tags || post.tags.length === 0) {
+  if (!post.value.tags || post.value.tags.length === 0) {
     error.value = '请至少添加一个标签'
     return
   }
 
-  if (!post.excerpt) {
-    post.excerpt = post.content
+  if (!post.value.excerpt) {
+    post.value.excerpt = post.value.content
       .replace(/#|`|_|\*|\[|\]/g, '')
       .substring(0, 150) + '...'
   }
-  alert(isEditMode.value)
+  
   isSaving.value = true
   error.value = null
 
   try {
     if (isEditMode.value) {
-      post.published = true
-      await blogApi.updatePost(post.id, post)
+      post.value.published = true
+      await blogApi.updatePost(post.value.id, post.value)
     } else {
-      post.published = true
-      const response = await blogApi.createPost(post)
-      post.id = response.data.id
+      post.value.published = true
+      const response = await blogApi.createPost(post.value)
+      post.value.id = response.data.id
     }
 
     isSaving.value = false
@@ -148,69 +148,20 @@ const fetchPost = async (id) => {
 
   try {
     const data = await blogApi.getPost(id)
-    
     // 更新表单数据
-    post.id = data.id
-    post.title = data.title
-    post.content = data.content
-    post.excerpt = data.excerpt
-    post.tags = data.tags || []
-    post.author = data.author
-    post.date = data.date
+    post.value.id = data.id
+    post.value.title = data.data.title
+    post.value.content = data.data.content
+    post.value.excerpt = data.data.excerpt
+    post.value.tags = data.data.tags || []
+    post.value.author = data.data.author
+    post.value.date = data.data.date
     
     isEditMode.value = true
     isLoading.value = false
   } catch (err) {
     console.error('获取文章失败:', err)
     error.value = '获取文章失败，请稍后再试'
-    isLoading.value = false
-    
-    // 模拟数据用于演示
-    const mockPosts = [
-      {
-        id: 1,
-        title: '我的第一篇博客',
-        excerpt: '这是我的第一篇博客文章，让我们开始这段旅程吧！',
-        date: '2024-03-31',
-        author: '博主',
-        content: '# 欢迎来到我的博客\n\n这是我的第一篇博客文章。\n\n## Markdown 支持\n\n现在我们的博客支持 Markdown 了！\n\n- 列表项 1\n- 列表项 2\n- 列表项 3\n\n```javascript\nconst hello = () => {\n  console.log("Hello, World!");\n};\n```',
-        tags: ['Vue.js', '前端开发', '技术分享']
-      },
-      {
-        id: 2,
-        title: 'Vue.js 开发技巧',
-        excerpt: '分享一些实用的 Vue.js 开发技巧和最佳实践。',
-        date: '2024-03-30',
-        author: '博主',
-        content: '# Vue.js 开发技巧\n\n本文分享一些实用的 Vue.js 开发技巧和最佳实践。\n\n## 响应式系统\n\nVue.js 的响应式系统是其核心特性之一。\n\n```javascript\n// 组合式 API 示例\nimport { ref, computed } from "vue";\n\nconst count = ref(0);\nconst doubled = computed(() => count.value * 2);\n```\n\n## 组件设计\n\n良好的组件设计可以提高代码的可维护性和复用性。',
-        tags: ['Vue.js', '开发技巧', '最佳实践']
-      },
-      {
-        id: 3,
-        title: '前端开发趋势',
-        excerpt: '探讨2024年前端开发的最新趋势和技术栈。',
-        date: '2024-03-29',
-        author: '博主',
-        content: '# 2024年前端开发趋势\n\n本文探讨2024年前端开发的最新趋势和技术栈。\n\n## 1. AI 驱动的开发工具\n\n人工智能正在改变前端开发的方式，从代码补全到自动生成组件。\n\n## 2. WebAssembly\n\nWebAssembly 继续获得更多支持和应用场景。\n\n## 3. 微前端架构\n\n微前端架构为大型应用提供了更好的可维护性和团队协作。',
-        tags: ['前端开发', '技术趋势', '2024']
-      }
-    ]
-    
-    const editId = parseInt(id)
-    const mockPost = mockPosts.find(p => p.id === editId)
-    
-    if (mockPost) {
-      post.id = mockPost.id
-      post.title = mockPost.title
-      post.content = mockPost.content
-      post.excerpt = mockPost.excerpt
-      post.tags = mockPost.tags || []
-      post.author = mockPost.author
-      post.date = mockPost.date
-      
-      isEditMode.value = true
-    }
-    
     isLoading.value = false
   }
 }

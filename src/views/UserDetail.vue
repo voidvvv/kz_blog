@@ -7,21 +7,23 @@ const userInfoErr = ref(false)
 const loading = ref(true)
 
 // 使用计算属性安全地访问用户信息
-const userInfo = computed(() => userStore.$state.userInfo || {})
+const userInfo = ref(null)
 
 onMounted(async () => {
     try {
-        userStore.fetchUserInfo()
+        
+        userInfo.value = await userStore.fetchUserInfo()
         if (!userInfo.value || Object.keys(userInfo.value).length === 0) {
             userInfoErr.value = true
         }
+
     } catch (error) {
         console.error('获取用户信息失败:', error)
         userInfoErr.value = true
     } finally {
         loading.value = false
     }
-})+
+})
 
 function formatDate(timestamp) {
     if (!timestamp) return '未知'

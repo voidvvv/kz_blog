@@ -5,6 +5,7 @@ import Login from '../views/Login.vue'
 import PostEditor from '../components/PostEditor.vue'
 import { useUserStore } from '../store/api'
 import UserDetail from '../views/UserDetail.vue'
+
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -14,7 +15,7 @@ const router = createRouter({
       component: Home
     },
     {
-      path: '/post/:id',
+      path: '/post/:id(\\d+)',
       name: 'post-detail',
       component: BlogDetail,
       props: true
@@ -25,9 +26,10 @@ const router = createRouter({
       component: Login
     },
     {
-      path: '/editor',
+      path: '/editor/:id?',
       name: 'editor',
-      component: PostEditor
+      component: PostEditor,
+      props: true
     },
     {
       path: '/user',
@@ -42,7 +44,7 @@ router.beforeEach((to, from, next) => {
   const userStore = useUserStore()
   // userStore.fetchUserInfo()
   const isAuthenticated = userStore.$state.isLoggedIn
-  userStore.isLoggedIn;
+  
   if (to.meta.requiresAuth && !isAuthenticated) {
     next('/login')
   } else {

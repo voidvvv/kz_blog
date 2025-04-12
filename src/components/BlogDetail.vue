@@ -187,10 +187,11 @@ const addComment = async () => {
 // 编辑文章
 const editPost = () => {
   router.push({ 
-    name: 'editor', 
+    name: 'editor',
     params: { id: post.value.id }
   })
 }
+
 
 onMounted(() => {
   checkLoginStatus()

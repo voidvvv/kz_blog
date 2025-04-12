@@ -174,8 +174,8 @@ const toggleForm = () => {
 
 // 使用演示账号登录
 const demoLogin = async () => {
-  loginForm.username = 'demo'
-  loginForm.password = 'password123'
+  loginForm.username = 'kzkz111'
+  loginForm.password = 'kzkz111'
   await handleLogin()
 }
 </script>
