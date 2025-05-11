@@ -1,4 +1,5 @@
 <script setup>
+import My from '../components/My.vue'
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { blogApi } from '../services/api'
@@ -119,6 +120,7 @@ onMounted(() => {
 </script>
 
 <template>
+  <!-- <My></My> -->
   <div class="home">
     <!-- 头部区域 -->
     <section class="hero-section">
